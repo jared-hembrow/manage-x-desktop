@@ -36,7 +36,6 @@ const Logbook = (props: Props) => {
       <Table compact size="small" celled collapsing>
         <Table.Header>
           <Table.HeaderCell>Start Date</Table.HeaderCell>
-
           <Table.HeaderCell>End Date</Table.HeaderCell>
           <Table.HeaderCell>Purpose</Table.HeaderCell>
           <Table.HeaderCell>Start Odometer</Table.HeaderCell>
