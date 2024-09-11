@@ -1,0 +1,11 @@
+.logbook-list {
+  display: flex;
+  flex-direction: column;
+}
+.logbook-row {
+  display: flex;
+}
+.logbook-col {
+  margin: 3px;
+  border: 1px solid red;
+}

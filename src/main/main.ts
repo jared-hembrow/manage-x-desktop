@@ -15,6 +15,12 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+// DATABASE
+import sqlite3 from 'sqlite3';
+const db = new sqlite3.Database('db.sqlite3', (err) => {
+  if (err) console.error('Database opening error: ', err);
+});
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -27,8 +33,14 @@ let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
+  console.log('msg template', msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+ipcMain.on('request', async (event, sql) => {
+  console.log('sql qurry', sql);
+  db.all(sql, (err, result) => {
+    event.reply('asynchronous-sql-reply', result);
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
