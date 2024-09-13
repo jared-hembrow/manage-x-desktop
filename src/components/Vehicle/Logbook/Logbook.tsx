@@ -4,7 +4,7 @@ import { Button, Input, Table } from 'semantic-ui-react';
 import dayjs from 'dayjs';
 import { StateManager } from '../..';
 import { ipcRenderer } from 'electron';
-import { asyncSql } from '../../../renderer';
+import { asyncRequest } from '../../../renderer';
 type Props = {};
 
 type logbookEntry = {
@@ -21,15 +21,11 @@ type logbookEntry = {
 const Logbook = (props: Props) => {
   const [message, setMessage] = useState('SELECT sqlite_version()');
   const [response, setResponse] = useState();
-  function send(sql: string) {
-    asyncSql(sql).then((result) => setResponse(result));
-  }
 
   const state = useContext(StateManager);
-  console.log(state.get());
   useEffect(() => {
-    send('hello from logbook');
-  });
+    // state.makeRequest();
+  }, []);
   console.log(response);
   return (
     <div>

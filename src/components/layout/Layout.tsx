@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { FC, ReactNode } from 'react';
 import './Layout.css';
-type Props = {};
+import { Icon } from 'semantic-ui-react';
+import { Sidebar } from './Sidebar';
+import { useLocation, useParams } from 'react-router-dom';
 
-const Layout = (props: Props) => {
+type Props = {
+  children: ReactNode;
+};
+
+const Layout: FC<Props> = ({ children }) => {
+  const location = useLocation();
+  const pp = useParams();
+  console.log('Location: ', location, pp);
   return (
     <div className="layout-container">
-      <div className="sidebar">2</div>
-      <div className="main">3</div>
+      <div className="sidebar">
+        <Sidebar />
+      </div>
+      <div className="main">{children}</div>
     </div>
   );
 };

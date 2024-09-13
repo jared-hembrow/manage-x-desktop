@@ -14,12 +14,29 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
+// REQUEST
+import { request } from './request';
 // DATABASE
-import sqlite3 from 'sqlite3';
-const db = new sqlite3.Database('db.sqlite3', (err) => {
-  if (err) console.error('Database opening error: ', err);
-});
+import sqlite from 'sqlite3';
+import { RequestObject, ResponseObject } from 'types';
+import {
+  CarModel,
+  FuelEntryModel,
+  LogbookModel,
+  LogEntryModel,
+} from './models';
+import { Model } from './database/database';
+const sqlite3 = sqlite.verbose();
+// ########################################
+// MODELS
+const models: { [tableName: string]: Model<unknown> } = {
+  // Car models
+  car: CarModel,
+  logbook: LogbookModel,
+  logEntry: LogEntryModel,
+  fuelEntry: FuelEntryModel,
+};
+// ########################################
 
 class AppUpdater {
   constructor() {
@@ -36,11 +53,11 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log('msg template', msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
-ipcMain.on('request', async (event, sql) => {
-  console.log('sql qurry', sql);
-  db.all(sql, (err, result) => {
-    event.reply('asynchronous-sql-reply', result);
-  });
+
+// Request channel
+ipcMain.on('request', async (event, req) => {
+  const res = await request(req, db, models);
+  event.reply('response', res);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -54,6 +71,22 @@ const isDebug =
 if (isDebug) {
   require('electron-debug')();
 }
+
+// Initialize DB
+const db = new sqlite3.Database('db.sqlite3', (err) => {
+  if (err) console.error('Database opening error: ', err);
+});
+
+// Create all tables
+db.serialize(() => {
+  for (let i in models) {
+    try {
+      models[i].create(db);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+});
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');

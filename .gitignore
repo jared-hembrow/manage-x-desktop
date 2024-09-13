@@ -27,3 +27,8 @@ npm-debug.log.*
 *.css.d.ts
 *.sass.d.ts
 *.scss.d.ts
+
+# DB
+db.sqlite3
+*.sqlite3
+*.db
