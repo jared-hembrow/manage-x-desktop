@@ -1,4 +1,6 @@
-import React, { ReactElement, useState } from 'react';
+import { StateManager } from 'components/Context';
+import { ModalTypes } from 'components/Context/reducers/modalReducer';
+import React, { ReactElement, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Icon, Label, Menu } from 'semantic-ui-react';
 
@@ -7,6 +9,7 @@ type Props = {};
 const Sidebar = (props: Props) => {
   const navigate = useNavigate();
   const [carList, setCarlist] = useState<boolean>(false);
+  const { dispatch } = useContext(StateManager);
   const carLitClick = (item: string) => {
     if (item === 'main') return setCarlist((p) => !p);
   };
@@ -52,7 +55,7 @@ const Sidebar = (props: Props) => {
       <Menu.Item
         name="Finance"
         //   active={activeItem === 'Finance'}
-        //   onClick={this.handleItemClick}
+        onClick={() => dispatch({ type: ModalTypes.CREATE_CAR })}
       >
         <Icon name="money" />
         Finance

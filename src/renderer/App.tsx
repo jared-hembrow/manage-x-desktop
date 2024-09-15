@@ -39,7 +39,10 @@ export default function App() {
               </Layout>
             }
           />
-          <Route path="/cars/:id" element={<Layout>hello</Layout>} />
+          <Route
+            path="/cars/:id/logbooks/:id"
+            element={<Layout>hello</Layout>}
+          />
         </Routes>
       </Router>
     </StateManagerProvider>

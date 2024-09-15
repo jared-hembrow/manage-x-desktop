@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "incremental": true,
     "target": "es2022",
     "module": "commonjs",

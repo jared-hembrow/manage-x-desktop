@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Card, List } from 'semantic-ui-react';
+import { Button, Card, Label, List } from 'semantic-ui-react';
 import { Car } from 'types/models';
 
 type Props = {
@@ -18,9 +18,15 @@ const CarCard: FC<Props> = ({ car }) => {
         <Card.Header>{`${car.year} ${car.make} ${car.model}`}</Card.Header>
         <Card.Meta>{car.plate}</Card.Meta>
       </Card.Content>
-      <Card.Content>Logbook</Card.Content>
-      <Card.Content></Card.Content>
-      <Card.Content></Card.Content>
+      <Card.Content style={{ padding: '0' }}>
+        <Button style={{ width: '100%', textAlign: 'left' }}>Logbook</Button>
+      </Card.Content>
+      <Card.Content style={{ padding: '0' }}>
+        <Button style={{ width: '100%', textAlign: 'left' }}>Fuel Usage</Button>
+      </Card.Content>
+      <Card.Content style={{ padding: '0' }}>
+        <Button style={{ width: '100%', textAlign: 'left' }}>Maintence</Button>
+      </Card.Content>
     </Card>
   );
 };

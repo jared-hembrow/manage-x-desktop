@@ -17,25 +17,26 @@ import { resolveHtmlPath } from './util';
 // REQUEST
 import { request } from './request';
 // DATABASE
-import sqlite from 'sqlite3';
+import 'reflect-metadata'; // Required by TypoORM.
+
 import { RequestObject, ResponseObject } from 'types';
-import {
-  CarModel,
-  FuelEntryModel,
-  LogbookModel,
-  LogEntryModel,
-} from './models';
-import { Model } from './database/database';
-const sqlite3 = sqlite.verbose();
+// import {
+//   CarModel,
+//   FuelEntryModel,
+//   LogbookModel,
+//   LogEntryModel,
+// } from './database/models';
+import { db } from './database';
+
 // ########################################
 // MODELS
-const models: { [tableName: string]: Model<unknown> } = {
-  // Car models
-  car: CarModel,
-  logbook: LogbookModel,
-  logEntry: LogEntryModel,
-  fuelEntry: FuelEntryModel,
-};
+// const models: { [tableName: string]: Model<unknown> } = {
+//   // Car models
+//   car: CarModel,
+//   logbook: LogbookModel,
+//   logEntry: LogEntryModel,
+//   fuelEntry: FuelEntryModel,
+// };
 // ########################################
 
 class AppUpdater {
@@ -56,7 +57,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 // Request channel
 ipcMain.on('request', async (event, req) => {
-  const res = await request(req, db, models);
+  const res = await request(req);
   event.reply('response', res);
 });
 
@@ -72,21 +73,13 @@ if (isDebug) {
   require('electron-debug')();
 }
 
-// Initialize DB
-const db = new sqlite3.Database('db.sqlite3', (err) => {
-  if (err) console.error('Database opening error: ', err);
-});
-
-// Create all tables
-db.serialize(() => {
-  for (let i in models) {
-    try {
-      models[i].create(db);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-});
+// Initialize DB - create tables
+db.initialize()
+  .then((d) => {
+    // d.synchronize();
+    console.log('working with DB');
+  })
+  .catch((err) => console.log(err));
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');

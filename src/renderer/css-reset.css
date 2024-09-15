@@ -3,6 +3,8 @@
    License: none (public domain)
 */
 @import '~semantic-ui-css/semantic.css';
+@import 'react-toastify/dist/ReactToastify.css';
+
 html,
 body,
 div,
